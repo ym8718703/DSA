@@ -1,18 +1,19 @@
-/*
- * LC #33 - 
- * Difficulty: 
- * Topic: 
- * Date: 
- * 
- * Approach: Modified binary search
- * Time: O() | Space: O()
- * 
- * Status: 
- */
-
 #include <iostream>
 #include <vector>
 using namespace std;
+
+/*
+ * LC | 53 | Maximum Subarray
+ * Difficulty: Medium
+ * Topic: DP, Divide & Conquer
+ * Date: Apr 14
+ * Status: SOLVED
+ * 
+ * 
+ * Approach : two pointer
+ * Time: O(n2) | Space: O(1)
+ */
+
 
 int my_two(){
     int nums[10] = {1,2,3,4,5,6,7,-54,-5,10};
@@ -31,7 +32,7 @@ int my_two(){
 
 }
 
-int two_pointer(){
+int apancollege(vector<int>& b){
     int array[10] = {3,-4,5,4,-1,7,-8};
     int m = INT16_MIN;
     int st = 0;
@@ -45,27 +46,13 @@ int two_pointer(){
         }
         st++;
     }
-    cout<<"Given Array:\n";
-    for(int i = 0 ; i < end ; i++){
-        cout<<array[i]<<" ";
-    }
-    return x;
+    return m;
 }
 
-int maxSubarray(vector<int>& arr) {
-    int maxSum = arr[0];        
-    int currentSum = arr[0];
-
-    for (int i = 1; i < arr.size(); i++) {
-        currentSum = max(arr[i], currentSum + arr[i]); 
-        maxSum = max(maxSum, currentSum);
-    }
-    return maxSum;
-}
 
 int main(){
     vector<int> array = {-4,-5,-6,5,7,8};
-    int ans = maxSubarray(array);
+    int ans = apancollege(array);
 
     cout<<ans;
     

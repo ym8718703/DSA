@@ -2,6 +2,18 @@
 #include <vector>
 using namespace std;
 
+/*
+ * LC | 1 | Two Sum
+ * Difficulty: Easy
+ * Topic: Array
+ * Date: Apr 7
+ * Status: SOLVED
+ * 
+ * 
+ * Approach : Two Pointer
+ * Time: O(n) | Space: O(1)
+ */
+
 
 int brute(){
     int target = 9;

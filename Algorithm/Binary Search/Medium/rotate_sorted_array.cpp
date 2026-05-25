@@ -2,6 +2,18 @@
 #include <vector>
 using namespace std;
 
+/*
+ * LC | 33 | Search in Rotated Sorted Array
+ * Difficulty: Medium
+ * Topic: BS
+ * Date: May 24
+ * Status: SOLVED
+ * 
+ * 
+ * Approach: Modified binary search
+ * Time: O(log n) | Space: O(1)
+ */
+
 int ans(vector<int>& nums,int target){
     int st = 0, end = nums.size()-1, mid;
 

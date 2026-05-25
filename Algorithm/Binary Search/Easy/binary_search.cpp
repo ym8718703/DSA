@@ -2,6 +2,18 @@
 #include <vector>
 using namespace std;
 
+
+/*
+ * LC | 703 } | Binay Search
+ * Difficulty: Easy
+ * Topic: BS
+ * Date: Apr 5
+ * Status: SOLVED
+ * 
+ * 
+ * Approach: binary search
+ * Time: O(log n) | Space: O(1)
+ */
 int linearsearch(int a[], int target){
     int n = sizeof(a)/4;
     for(int i = 0 ; i < n ; i++){

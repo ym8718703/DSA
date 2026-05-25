@@ -1,6 +1,18 @@
 #include <iostream>
 using namespace std;
 
+/*
+ * LC | 50 | Pow(x,n)  
+ * Difficulty: Medium
+ * Topic: Math, Recursion
+ * Date: 
+ * Status: 
+ * 
+ * 
+ * Approach: Modified binary search
+ * Time: O() | Space: O()
+ */
+
 int main(){
     double x;
     int n;

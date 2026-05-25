@@ -3,6 +3,17 @@
 #include <climits>
 using namespace std;
 
+/*
+ * LC | 11 | two_pointer With Most Water 
+ * Difficulty: Medium
+ * Topic: Array, greedy
+ * Date: Apr 22
+ * Status: SOLVED
+ * 
+ * 
+ * Approach: Two Pointer
+ * Time: O() | Space: O(1)
+ */
 
 int brute(vector<int> &b){
     int length, height;
@@ -20,7 +31,7 @@ int brute(vector<int> &b){
     return vol;
 }
 
-int container(vector<int> &b){
+int two_pointer(vector<int> &b){
     int length, height;
     int st = 0;
     int end = b.size();
@@ -41,7 +52,7 @@ int container(vector<int> &b){
 
 int main(){
     vector<int> arry = {1,8,6,2,5,4,8,3,7};
-    int ans = container(arry);
+    int ans = two_pointer(arry);
     cout<<ans;
 
     return 0 ;

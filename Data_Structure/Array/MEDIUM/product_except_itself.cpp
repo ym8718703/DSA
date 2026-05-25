@@ -2,8 +2,17 @@
 #include <vector>
 using namespace std;
 
-//time complexity = O(n)
-//SC = O(1)
+/*
+ * LC | 238 | Product of Array Except Self 
+ * Difficulty: Medium 
+ * Topic: Prfix sum
+ * Date: 
+ * Status: Struggling
+ * 
+ * Approach: Prefix & Suffix
+ * Time: O(n) | Space: O(1)
+ * 
+ */
 vector<int> product(vector<int> &nums) {
     int n = nums.size();
     vector<int> ans(n , 1);
