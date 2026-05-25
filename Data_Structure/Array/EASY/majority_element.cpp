@@ -1,7 +1,19 @@
 #include <iostream>
 #include <vector>
+#include <algorithm>
 using namespace std;
 
+/*
+ * LC | 169 | Majority Element
+ * Difficulty: Easy
+ * Topic: Array
+ * Date: Apr 21
+ * Status: SOLVED
+ * 
+ * 
+ * Approach: Brute force
+ * Time: O(n2) | Space: O(1)
+ */
 
 int brute_force(vector<int> vec){ //O(n^2)
     for(int i = 0 ; i < vec.size() ; i++){
@@ -17,7 +29,10 @@ int brute_force(vector<int> vec){ //O(n^2)
     }
     return -1;
 }
-
+/*
+* Approach: My Optimised
+* Time: O(n) | Space: O(1)
+*/
 
 int optimised(vector<int> array){
     sort(array.begin(), array.end());
@@ -38,6 +53,11 @@ int optimised(vector<int> array){
     }
     return ans;
 }
+
+/*
+* Approach: Apna College
+* Time: O(n) | Space: O(1)
+*/
 
 int maxelement(vector<int> &vec) {
     int fre = 0, ans = 0;

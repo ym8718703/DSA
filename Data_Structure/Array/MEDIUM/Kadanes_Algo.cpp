@@ -1,8 +1,18 @@
+/*
+ * LC #33 - 
+ * Difficulty: 
+ * Topic: 
+ * Date: 
+ * 
+ * Approach: Modified binary search
+ * Time: O() | Space: O()
+ * 
+ * Status: 
+ */
+
 #include <iostream>
 #include <vector>
 using namespace std;
-
-
 
 int my_two(){
     int nums[10] = {1,2,3,4,5,6,7,-54,-5,10};
@@ -24,7 +34,7 @@ int my_two(){
 int two_pointer(){
     int array[10] = {3,-4,5,4,-1,7,-8};
     int m = INT16_MIN;
-    int st = 0 ;
+    int st = 0;
     int end = sizeof(array)/sizeof(array[0]);
 
     while(st <= end){
