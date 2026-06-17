@@ -11,7 +11,7 @@ using namespace std;
  * 
  * Approach: Modified binary search
  * Time: O() | Space: O()
- */
+*/
 
 int main(){
     double x;

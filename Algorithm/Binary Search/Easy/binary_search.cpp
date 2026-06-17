@@ -3,6 +3,16 @@
 using namespace std;
 
 
+int linear_search(vector<int> &b, int target){
+    for(int i = 0 ; i<b.size() ; i++){
+        if(b[i]=target){
+            return i;
+        }
+    }
+    return -1;
+}
+
+
 /*
  * LC | 703 } | Binay Search
  * Difficulty: Easy
@@ -13,16 +23,7 @@ using namespace std;
  * 
  * Approach: binary search
  * Time: O(log n) | Space: O(1)
- */
-int linearsearch(int a[], int target){
-    int n = sizeof(a)/4;
-    for(int i = 0 ; i < n ; i++){
-        if(target = a[i]){
-            return i;
-        }
-    }
-    return -1;
-}
+*/
 
 int bs(vector<int>& b, int target){
     int st=0; int end = b.size(), mid;
@@ -44,13 +45,10 @@ int bs(vector<int>& b, int target){
 }
 int main(){
     vector<int> a = {1,2,3,7,9,12,14,38};
-    int z = 14;
 
     vector<int> b = {1,2,3,6,8};
-    int x = 8;
-    int y = 10;
 
-    cout<<bs(b, x);
+    cout<<bs(b, 8);
 
     return 0;
 

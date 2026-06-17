@@ -13,9 +13,9 @@ using namespace std;
  * 
  * Approach: Brute force
  * Time: O(n2) | Space: O(1)
- */
+*/
 
-int brute_force(vector<int> vec){ //O(n^2)
+int brute_force(vector<int> vec){ 
     for(int i = 0 ; i < vec.size() ; i++){
         int frequency = 1;
         for(int j = i+1 ; j < vec.size() ; j++){
@@ -59,7 +59,7 @@ int optimised(vector<int> array){
 * Time: O(n) | Space: O(1)
 */
 
-int maxelement(vector<int> &vec) {
+int moore_algo(vector<int> &vec) {
     int fre = 0, ans = 0;
     for (int i = 0; i < vec.size(); i++) {
         if (fre == 0) {       
@@ -76,6 +76,6 @@ int maxelement(vector<int> &vec) {
 
 int main(){
     vector<int> array = {3,1,3,2,3,2,3,1,3,1};
-    cout<<maxelement(array);
+    cout<<moore_algo(array);
     return 0 ;
 }

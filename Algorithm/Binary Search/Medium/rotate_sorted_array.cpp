@@ -12,7 +12,7 @@ using namespace std;
  * 
  * Approach: Modified binary search
  * Time: O(log n) | Space: O(1)
- */
+*/
 
 int ans(vector<int>& nums,int target){
     int st = 0, end = nums.size()-1, mid;
