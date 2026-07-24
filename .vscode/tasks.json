@@ -13,9 +13,7 @@
       },
       "group": { "kind": "build", "isDefPault": true },
       "problemMatcher": ["$gcc"],
-      "presentation": {
-        "reveal": "silent",
-        "panel": "shared"
+      "presentation": {"reveal": "silent", "panel": "shared"
       }
     }
   ]
