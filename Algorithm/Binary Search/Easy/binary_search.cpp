@@ -3,15 +3,6 @@
 using namespace std;
 
 
-int linear_search(vector<int> &b, int target){
-    for(int i = 0 ; i<b.size() ; i++){
-        if(b[i]=target){
-            return i;
-        }
-    }
-    return -1;
-}
-
 
 /*
  * LC | 703 } | Binay Search
@@ -30,7 +21,7 @@ int bs(vector<int>& b, int target){
     
 
     while(st <= end){
-        mid = st + (end-st)/2; // mid = (st + end)/2
+        mid = st + (end-st)/2; 
         if(target > b[mid]){
             st = mid+1;
         }
@@ -48,7 +39,10 @@ int main(){
 
     vector<int> b = {1,2,3,6,8};
 
-    cout<<bs(b, 8);
+    int target;
+    cin >> target;
+
+    cout << bs(a,target);
 
     return 0;
 
