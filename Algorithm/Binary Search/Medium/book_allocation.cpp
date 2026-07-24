@@ -5,7 +5,8 @@ using namespace std;
 bool isvalid(vector<int>& a,int possible_ans, int m) {
     int student = 1;
     int page_count = 0;
-    for(int i = 0; i < a.size(); i++) {
+    int n = a.size();
+    for(int i = 0; i < n; i++) {
         if(page_count + a[i] <= possible_ans) {
             page_count += a[i];
         } else {
@@ -17,10 +18,11 @@ bool isvalid(vector<int>& a,int possible_ans, int m) {
     return student <= m ? true: false; 
 };
 int minmaxallocate(vector<int> &nums, int m) {
-    if(nums.size() < m) return -1;
-
+    
     int end = 0;
     int n = nums.size();
+
+    if(n < m) return -1;
     for(int i = 0; i < n; i++) {
         end += nums[i];
     }
@@ -42,8 +44,16 @@ int minmaxallocate(vector<int> &nums, int m) {
 
 
 int main () {
-    vector<int> books = {2,4,6,7,1};
-    int students = 6;
+    vector<int> books;
+    int students;
+    cin >> students;
+ 
+    int x;
+    while(cin >> x) {
+        books.push_back(x);
+    }
+
+
     cout << minmaxallocate(books,students);
     return 0;
 }

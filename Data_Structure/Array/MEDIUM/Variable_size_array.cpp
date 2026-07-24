@@ -3,7 +3,7 @@
 using namespace std;
 
 int search(vector<int>& nums, int target) {
-    int st = 0;
+    int st = 0;w
     int end = nums.size()-1;
     int mid;
     while(st < end) {
