@@ -32,3 +32,19 @@ public:
         return ans;
     }
 };
+
+int main() {
+    Solution S1;
+    int i = 0;
+    vector<int> array;
+    int x;
+    while(cin >> x) {
+        array.push_back(x);
+        i++;
+    }
+
+    vector<int> ans = S1.product(array);
+    for(int i = 0; i < ans.size(); i++) {
+        cout << ans[i] << " ";
+    }
+}
