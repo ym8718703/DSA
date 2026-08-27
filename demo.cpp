@@ -52,7 +52,6 @@ int main() {
     int ans = x^y;
     cout << ans;
     
-    
     return 0;
 
 }

@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive 3D Space Simulation</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body, html {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #000;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #fff;
+        }
+        canvas {
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+        #ui-container {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 10;
+            background: rgba(10, 10, 25, 0.85);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #1e293b;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            max-width: 300px;
+        }
+        h1 {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #38bdf8;
+        }
+        .control-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            font-size: 0.8rem;
+            color: #94a3b8;
+            margin-bottom: 5px;
+        }
+        input[type="range"] {
+            width: 100%;
+            accent-color: #38bdf8;
+        }
+        button {
+            width: 100%;
+            background: #38bdf8;
+            color: #0f172a;
+            border: none;
+            padding: 10px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        button:hover {
+            background: #0ea5e9;
+        }
+        #instructions {
+            margin-top: 15px;
+            font-size: 0.75rem;
+            color: #64748b;
+            line-height: 1.4;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="ui-container">
+        <h1>Orrery Sim</h1>
+        <div class="control-group">
+            <label id="speed-label">Simulation Speed: 1x</label>
+            <input type="range" id="speed-slider" min="0" max="5" step="0.1" value="1">
+        </div>
+        <button id="pause-btn">Pause Simulation</button>
+        <div id="instructions">
+            Drag mouse to rotate view.<br>
+            Scroll to zoom in/out.
+        </div>
+    </div>
+
+    <canvas id="spaceCanvas"></canvas>
+
+    <script>
+        const canvas = document.getElementById('spaceCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // UI Elements
+        const speedSlider = document.getElementById('speed-slider');
+        const speedLabel = document.getElementById('speed-label');
+        const pauseBtn = document.getElementById('pause-btn');
+
+        // Sim State
+        let isPaused = false;
+        let simSpeed = 1;
+        let zoom = 1;
+        let rotationX = 1.1; // Isometric tilt
+        let rotationZ = 0;   // Spin rotation
+
+        // Interaction State
+        let isDragging = false;
+        let previousMousePosition = { x: 0, y: 0 };
+
+        // Resize Canvas
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        // Generate Static Background Starfield
+        const stars = [];
+        for (let i = 0; i < 300; i++) {
+            stars.push({
+                x: Math.random() * 3000 - 1500,
+                y: Math.random() * 3000 - 1500,
+                z: Math.random() * 3000 - 1500,
+                size: Math.random() * 1.5
+            });
+        }
+
+        // Celestial Body Data
+        const sun = { x: 0, y: 0, z: 0, radius: 35, color: '#f59e0b' };
+        const planets = [
+            { name: 'Mercury', distance: 70, radius: 4, speed: 0.04, color: '#94a3b8', angle: 0 },
+            { name: 'Venus', distance: 110, radius: 8, speed: 0.015, color: '#f59e0b', angle: Math.PI * 0.5 },
+            { name: 'Earth', distance: 160, radius: 9, speed: 0.01, color: '#3b82f6', angle: Math.PI },
+            { name: 'Mars', distance: 220, radius: 6, speed: 0.008, color: '#ef4444', angle: Math.PI * 1.5 },
+            { name: 'Jupiter', distance: 310, radius: 18, speed: 0.002, color: '#f97316', angle: 0 }
+        ];
+
+        // 3D Projection Math
+        function project(x, y, z) {
+            // Rotate around Z axis (Horizontal rotation)
+            let x1 = x * Math.cos(rotationZ) - y * Math.sin(rotationZ);
+            let y1 = x * Math.sin(rotationZ) + y * Math.cos(rotationZ);
+            
+            // Rotate around X axis (Pitch tilt)
+            let y2 = y1 * Math.cos(rotationX) - z * Math.sin(rotationX);
+            let z2 = y1 * Math.sin(rotationX) + z * Math.cos(rotationX);
+
+            // Apply Zoom and Translate to screen center
+            const screenX = canvas.width / 2 + x1 * zoom;
+            const screenY = canvas.height / 2 + y2 * zoom;
+            
+            return { x: screenX, y: screenY, depth: z2 };
+        }
+
+        // Event Listeners for controls
+        speedSlider.addEventListener('input', (e) => {
+            simSpeed = parseFloat(e.target.value);
+            speedLabel.textContent = `Simulation Speed: ${simSpeed}x`;
+        });
+
+        pauseBtn.addEventListener('click', () => {
+            isPaused = !isPaused;
+            pauseBtn.textContent = isPaused ? 'Resume Simulation' : 'Pause Simulation';
+            pauseBtn.style.background = isPaused ? '#10b981' : '#38bdf8';
+        });
+
+        // Mouse Drag to Rotate
+        window.addEventListener('mousedown', (e) => {
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON') return;
+            isDragging = true;
+            previousMousePosition = { x: e.clientX, y: e.clientY };
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            const deltaX = e.clientX - previousMousePosition.x;
+            const deltaY = e.clientY - previousMousePosition.y;
+
+            rotationZ += deltaX * 0.005;
+            rotationX += deltaY * 0.005;
+
+            // Clamp vertical rotation to avoid flipping upside down
+            rotationX = Math.max(0.1, Math.min(Math.PI / 2, rotationX));
+
+            previousMousePosition = { x: e.clientX, y: e.clientY };
+        });
+
+        window.addEventListener('mouseup', () => isDragging = false);
+
+        // Scroll to Zoom
+        window.addEventListener('wheel', (e) => {
+            zoom -= e.deltaY * 0.001;
+            zoom = Math.max(0.3, Math.min(3, zoom));
+        });
+
+        // Main Animation Loop
+        function animate() {
+            ctx.fillStyle = '#020617';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // 1. Draw Starfield Background
+            stars.forEach(star => {
+                const proj = project(star.x, star.y, star.z);
+                // Only draw if within bounds
+                if (proj.x >= 0 && proj.x <= canvas.width && proj.y >= 0 && proj.y <= canvas.height) {
+                    ctx.fillStyle = `rgba(255, 255, 255, ${0.3 + Math.random() * 0.5})`;
+                    ctx.fillRect(proj.x, proj.y, star.size, star.size);
+                }
+            });
+
+            // Update planet angles if not paused
+            if (!isPaused) {
+                planets.forEach(p => {
+                    p.angle += p.speed * simSpeed;
+                });
+            }
+
+            // Collect items to sort by depth (Painter's Algorithm for proper rendering)
+            const renderQueue = [];
+
+            // Add Sun
+            const sunProj = project(sun.x, sun.y, sun.z);
+            renderQueue.push({ type: 'sun', ...sunProj, radius: sun.radius * zoom, color: sun.color });
+
+            // Add Planets and Orbits
+            planets.forEach(p => {
+                // Draw Orbit line directly to canvas before rendering bodies
+                ctx.beginPath();
+                for (let a = 0; a <= Math.PI * 2; a += 0.05) {
+                    const ox = p.distance * Math.cos(a);
+                    const oy = p.distance * Math.sin(a);
+                    const oProj = project(ox, oy, 0);
+                    if (a === 0) ctx.moveTo(oProj.x, oProj.y);
+                    else ctx.lineTo(oProj.x, oProj.y);
+                }
+                ctx.closePath();
+                ctx.strokeStyle = 'rgba(51, 65, 85, 0.3)';
+                ctx.lineWidth = 1;
+                ctx.stroke();
+
+                // Planet position
+                const px = p.distance * Math.cos(p.angle);
+                const py = p.distance * Math.sin(p.angle);
+                const pProj = project(px, py, 0);
+
+                renderQueue.push({
+                    type: 'planet',
+                    name: p.name,
+                    ...pProj,
+                    radius: p.radius * zoom,
+                    color: p.color
+                });
+            });
+
+            // Sort by depth (farthest items drawn first)
+            renderQueue.sort((a, b) => b.depth - a.depth);
+
+            // 2. Render Sun and Planets
+            renderQueue.forEach(item => {
+                ctx.beginPath();
+                ctx.arc(item.x, item.y, Math.max(1, item.radius), 0, Math.PI * 2);
+                
+                if (item.type === 'sun') {
+                    // Sun Glow Effect
+                    const gradient = ctx.createRadialGradient(item.x, item.y, item.radius * 0.2, item.x, item.y, item.radius * 2);
+                    gradient.addColorStop(0, '#fff');
+                    gradient.addColorStop(0.2, '#fbbf24');
+                    gradient.addColorStop(1, 'transparent');
+                    ctx.fillStyle = gradient;
+                    ctx.arc(item.x, item.y, item.radius * 2, 0, Math.PI * 2);ctx.fill();} 
+                    else {// Regular Planet renderingctx.fillStyle = item.color;ctx.fill();// Planet shadow effect from the sunctx.beginPath();ctx.arc(item.x, item.y, Math.max(1, item.radius), 0, Math.PI * 2);const shadowGrad = ctx.createRadialGradient(item.x - item.radius * 0.3, item.y - item.radius * 0.3, 0,item.x, item.y, item.radius);shadowGrad.addColorStop(0, 'rgba(255,255,255,0.1)');shadowGrad.addColorStop(1, 'rgba(0,0,0,0.7)');ctx.fillStyle = shadowGrad;ctx.fill();// Text labels for planets if zoomed in enoughif (zoom > 0.6) {ctx.fillStyle = '#64748b';ctx.font = '10px sans-serif';ctx.fillText(item.name, item.x + item.radius + 5, item.y + 3);}}});requestAnimationFrame(animate);}animate();
+### Features Built into This Code
