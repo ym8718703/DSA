@@ -6,7 +6,6 @@ using namespace std;
 
 /*
  * LC | 3622 | Check Divisibility by Digit Sum and Product
- * Difficulty: easy
  * Topic: Array
  * Date: Aug 22
  * Status: daily | solved
