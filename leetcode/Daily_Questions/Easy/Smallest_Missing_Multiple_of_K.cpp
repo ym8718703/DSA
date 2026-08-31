@@ -6,7 +6,6 @@ using namespace std;
 
 /*
  * LC | 3718 | Smallest Missing Multiple of K
- * Difficulty: easy
  * Topic: Array
  * Date: Aug 25
  * Status: daily | solved

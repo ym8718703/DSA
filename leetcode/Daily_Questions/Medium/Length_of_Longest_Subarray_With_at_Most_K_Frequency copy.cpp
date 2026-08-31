@@ -6,20 +6,22 @@
 using namespace std;
 
 /*
- * LC | 3090 | Maximum Length Substring With Two Occurrences
- * Difficulty: easy
+ * LC | 2958 | Length of Longest Subarray With at Most K Frequency
+ * Difficulty: medium
  * Topic: Array
- * Date: Aug 15
+ * Date: Aug 13
  * Status: daily | solved
  * 
  * 
- * Approach: hahahaha
+ * Approach: 
  * Time: O(n) | Space: O(1)
 */
+
+
 class Solution {
 public:
-    int maximumLengthSubstring(string s) {
-        unordered_map<char,int> freq;
+    int maxSubarrayLength(vector<int>& nums, int k) {
+        unordered_map<int,int> freq;
 
         int curr_count = 0;
         int max_count = 0;
@@ -27,16 +29,16 @@ public:
         int idx = 0;
         int st = 0;
 
-        while(idx < s.size()) {
-            if(freq.find(s[idx]) != freq.end()) {
-                if(freq[s[idx]] < 2) {
+        while(idx < nums.size()) {
+            if(freq.find(nums[idx]) != freq.end()) {
+                if(freq[nums[idx]] < k) {
                     curr_count++;
-                    freq[s[idx]] += 1;
+                    freq[nums[idx]] += 1;
                     idx++;
                 } else {
-                    if(s[st] != s[idx]) {
+                    if(nums[st] != nums[idx]) {
                         curr_count--;
-                        freq[s[st]]--;
+                        freq[nums[st]]--;
                     } else {
                         idx++;
                     }
@@ -44,7 +46,7 @@ public:
                 }
 
             } else {
-                freq[s[idx]] = 1;
+                freq[nums[idx]] = 1;
                 curr_count++;
                 idx++;
             }
